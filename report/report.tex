@@ -1,0 +1,400 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{hhline}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{multicol}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+\renewcommand\baselinestretch{1.0}
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+%% Comments
+
+\usepackage{color}
+
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{blue}{SS}{#1}}
+
+\title{Assignment 4, Part 1, Specification}
+\author{SFWR ENG 2AA4}
+\author{Harshil Modi}
+
+\begin {document}
+\maketitle
+
+\noindent This Module Interface Specification (MIS) document contains modules, types and methods for implementing the game state of a game of life. The game involves a n by m game-board with each location containing a cell. Each cell can be LIVE or DEAD. The following rules apply. \\
+
+For a cell that is 'LIVE':
+\begin{itemize}
+\item Each cell with one or no neighbours dies, as if by solitude.
+\item Each cell with four or more neighbours dies, as if by overpopulation.
+\item Each cell with two or three neighbours survives.
+\end{itemize}
+
+For a cell that is 'DEAD":
+\begin{itemize}
+\item Each cell with three neighbours becomes populated.
+\end{itemize}
+Refer to the following website for more information: https://bitstorm.org/gameoflife
+
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%STATE%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\section* {Cell Types Module}
+
+\subsection*{Module}
+CellType
+
+\subsection* {Uses}
+
+N/A
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Types}
+
+N/A
+
+\subsubsection* {Exported Types}
+StateT =$\{LIVE, DEAD\}$\\
+CellT = tuple of (row: $\mathbb{N}$, col: $\mathbb{N}$, s: StateT)
+
+\subsubsection* {Exported Access Programs}
+
+None
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+None
+
+\subsubsection* {State Invariant}
+
+None
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%GRID%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\section* {GameBoard ADT Module}
+
+\subsection*{Template Module}
+
+GameBoard
+
+\subsection* {Uses}
+CellType
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+ GameBoardT & $\mathbb{N}$, $\mathbb{N}$, Seq of (seq(CellT))  & GameBoardT & ~\\
+\hline
+set\_cell\_state & $\mathbb{N}, \mathbb{N}, StateT$ & ~ &invalid\_argument\\
+\hline
+get\_cell\_state & $\mathbb{N}, \mathbb{N}$ & $StateT $ & invalid\_argument\\
+\hline
+get\_GameBoard &~&Seq of (seq(CellT)) &~\\ 
+\hline
+get\_total\_cells & $StateT$ &$\mathbb{N}$ &~\\ 
+\hline
+get\_neighbour\_state &$\mathbb{N}$, $\mathbb{N}$, $StateT$ & $\mathbb{N}$ &~\\
+\hline
+iteration &$\mathbb{N}$& &~\\
+\hline
+\end{tabular}
+
+\subsubsection* {State Variables}
+Grid: seq of (seq(CellT))\\
+number\_rows : $\mathbb{N}$ \\
+number\_columns: $\mathbb{N}$\\
+
+\subsubsection* {State Invariant}
+None
+
+
+\subsubsection* {Assumptions \& Design Decisions}
+
+\begin{itemize}
+
+\item The gameBoardT constructor is called before any other access
+  routine is called on that instance. When the gameBoardT is called the number of 
+  rows an columns should match that of grid.
+
+\item The grid of the gameBoard is limited to the size of Grid and therefore the corner
+	cells will only have 3 neighbours.
+
+\item For better scalability, this module is specified as an Abstract Data Type
+  (ADT) instead of an Abstract Object. This would allow multiple games to be
+  created and tracked at once by a client.
+
+
+\end{itemize}
+
+
+\subsubsection* {Access Routine Semantics}
+Grid(row, col, grid):
+\begin{itemize}
+\item transition: Grid, number\_rows, number\_columns:= grid, row, col
+\item output out:= self
+\end{itemize}
+%%%%%%%%%% CREATE FUNCTION
+\noindent set\_cell\_state(row,col, state):
+\begin{itemize}
+\item transition: Grid[row][col].s := state
+\item exception: ($\lnot$ valid\_cell\_state(row, col, state)) $\implies$ invalid\_argument  
+\end{itemize}
+
+\noindent get\_cell\_state(row, col):
+\begin{itemize}
+\item out:= Grid[row][col].s
+\item exception: ($\lnot$ valid\_cell(row, col)) $\implies$ invalid\_argument
+\end{itemize}
+
+
+\noindent get\_gameboard():
+\begin{itemize}
+\item out:= Grid
+\item exception: None
+\end{itemize}
+
+\noindent get\_total\_cells(state):
+\begin{itemize}
+\item out:= $+ (\forall i , j : \mathbb{N}|vaild\_cell(i,j) \implies  Grid[i][j].s == state: 1)$
+\item exception: None
+\end{itemize}
+
+\noindent get\_neighbour\_state(row, col, state):
+\begin{itemize}
+\item out:= $+ (\forall i , j : \mathbb{N}|vaild\_neighbour\_cell(i,j) \implies  Grid[i][j].s == state: 1)$
+\item exception: None
+\end{itemize}
+
+\noindent iteration(int n):
+\begin{itemize}
+\item transition: $(\forall i , j : \mathbb{N}| i, j \in [-1..1]: \lnot(i = j) \land vaild\_neighbour\_cell(i,j) \implies  swap\_state(Grid[i][j].s))$
+\item exception: None
+\end{itemize}
+
+
+
+
+
+\subsection*{Local Types}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%LocalFunctions%%%%%%%%%%%%%%%%%%%%%%%%.
+
+
+\subsection*{Local Functions}
+
+valid\_cell: $ \mathbb{N} \times \mathbb{N} \rightarrow \mathbb{B}$ \\
+valid\_cell(row, col) $\equiv$ valid\_row(row) $\land$ valid\_column(col) \\\\
+
+\noindent valid\_cell\_state: $\mathbb{N} \times \mathbb{N} \times StateT \rightarrow \mathbb{B}$ \\
+valid\_cell\_state(row, col) $\equiv$ valid\_row(row) $\land$ valid\_column(col) $\land$ valid\_state(s)\\\\
+
+\noindent valid\_row: $\mathbb{N} \rightarrow \mathbb{B}$ \\
+valid\_row(row) $\equiv$ 0 $\leq$ row $\land$ row $<$ number\_rows\\\\
+
+\noindent valid\_col: $\mathbb{N} \rightarrow \mathbb{B}$ \\
+valid\_col(col) $\equiv$ 0 $\leq$ col $\land$ col $<$ number\_column\\\\
+
+\noindent valid\_neighnour\_cell: $\mathbb{N} \times \mathbb{N} \rightarrow \mathbb{B}$ \\
+valid\_col(col) $\equiv$ valid\_col(j) $\land$ valid\_row(i)\\
+
+\noindent valid\_state: $StateT \rightarrow \mathbb{B}$ \\
+valid\_state(state) $\equiv$ state = LIVE $\lor$ state = DEAD\\\\
+
+\noindent swap\_state: $\mathbb{N} \times \mathbb{N} \times StateT$\\
+\noindent swap\_state(i, j, s) $\equiv$ \\ 
+\begin{tabular}{|p{3.5cm}|p{6.5cm}|l|p{4cm}|}
+\hhline{|-|-|-|-|}
+s = DEAD & get\_neighbour\_state(i, j, LIVE) = 3 &  set\_cell\_state(i, j, LIVE)\\
+ \hhline{|-|-|-|-|}
+s = LIVE & get\_neighbour\_state(i, j, DEAD) $>$ 3 & set\_cell\_state(i, j, DEAD)\\
+\hhline{|~|-|-|-|}
+ & get\_neighbour\_state(i, j, DEAD) $<$ 2 & set\_cell\_state(i, j, DEAD)\\
+\hhline{|-|-|-|-|}
+\end{tabular}\\\\
+
+\newpage
+
+\section* {Display Module}
+
+\subsection* {Module}
+
+Display
+
+\subsection* {Uses}
+
+Gameboard, CellType
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Constants}
+
+None
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+write\_gamestdnt\_state & seq of (seq(CellT)) & ~ & ~\\
+\hline
+display\_game\_state & seq of (seq(CellT)) & ~ & ~\\
+\hline
+read\_game\_state &~ & seq of (seq(CellT)) & ~\\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {Environment Variables}
+
+input\_file: File listing initial Gameboard\\
+output\_file: File listing GameBoard state
+
+\subsubsection* {State Variables}
+input\_path : string \\
+output\_path: string\\
+
+\subsubsection* {State Invariant}
+
+None
+
+
+\subsubsection* {Assumptions}
+
+The input file will match the specification 
+
+
+
+
+\subsubsection* {Assumptions}
+
+The input file will match the given specification. The input\_file will be present. If the output\_file is present, the file will be overwritten and if not a new file with the name will be created.
+
+\subsubsection* {Access Routine Semantics}
+
+\noindent read\_game\_state()
+\begin{itemize}
+\item output: read data from the file input\_file associated with the state varaible input\_path.
+  Use this data to update and return the state of Seq of (Seq(CellT)).
+
+  The text file has the following format, indicated below. The $r_n$ represent the row index and $c_m$ represents the column index. Each location represents a cell where "X" represents a dead cell and "O" represents a live cell. All Data in the column is separated by a space and each row is separated by a new line character.
+  
+
+  \begin{equation}
+    \begin{array}{ccccccc}
+      r_0c_0, & r_0c_1, & r_0c_2, & ..., & r_0c_m \\
+      r_1c_0, & r_1c_1, & r_1c_2, & ..., & r_1c_m \\
+      r_2c_0, & r_2c_1, & r_2c_2, & ..., & r_2c_m \\
+       ...,   & ...,    & ...,    & ..., & ...,  \\
+      r_nc_0, & r_nc_1, & r_nc_2, & ...  & r_nc_m \\
+
+    \end{array}
+  \end{equation}
+
+\item exception: none
+\end{itemize}
+
+\noindent write\_game\_state(Grid)
+\begin{itemize}
+\item transition: writes data from Grid to the file output\_file where the path of the file can be found in the state variable output\_path.
+
+  The text file has the following format, indicated below. The $r_n$ represent the row index and $c_m$ represents the column index. Each location represents a cell where "X" represents a dead cell and "O" represents a live cell. All Data in the column is separated by a space and each row is separated by a new line character.
+  
+
+  \begin{equation}
+    \begin{array}{ccccccc}
+      r_0c_0, & r_0c_1, & r_0c_2, & ..., & r_0c_m \\
+      r_1c_0, & r_1c_1, & r_1c_2, & ..., & r_1c_m \\
+      r_2c_0, & r_2c_1, & r_2c_2, & ..., & r_2c_m \\
+       ...,   & ...,    & ...,    & ..., & ...,  \\
+      r_nc_0, & r_nc_1, & r_nc_2, & ...  & r_nc_m \\
+
+    \end{array}
+  \end{equation}
+
+\item exception: none
+\end{itemize}
+
+\noindent display\_game\_state(Grid)
+\begin{itemize}
+\item transition: prints data from Grid to the screen.
+
+  The printed data will be in the following format, indicated below. The $r_n$ represent the row index and $c_m$ represents the column index. Each location represents a cell where "X" represents a dead cell and "O" represents a live cell. All Data in the column is separated by a space and each row is separated by a new line character.
+  
+
+  \begin{equation}
+    \begin{array}{ccccccc}
+      r_0c_0, & r_0c_1, & r_0c_2, & ..., & r_0c_m \\
+      r_1c_0, & r_1c_1, & r_1c_2, & ..., & r_1c_m \\
+      r_2c_0, & r_2c_1, & r_2c_2, & ..., & r_2c_m \\
+       ...,   & ...,    & ...,    & ..., & ...,  \\
+      r_nc_0, & r_nc_1, & r_nc_2, & ...  & r_nc_m \\
+
+    \end{array}
+  \end{equation}
+
+\item exception: none
+\end{itemize}
+
+\newpage
+
+Overview and Critique of my design:\\
+
+\begin{itemize}
+\item For my design I decided on using a Structure CellT to represent the cell where each cell contains their location and a enum type StateT which has the state the cell "lIVE" or "DEAD". The reason this was done was for efficiency and for future maintainability. For my design I choose to go with the same rules of the game as game of life however if a cell was a corner cell then the cell only has 3 neighbours instead of 8. The reason for this was for easiness of implementation as time was limited. A seq (seq(CellT)) was used for better visibility and to mimic a 2D array.
+
+
+
+\item Consistency: Throughout the MIS and software coding portion of this assignment, consistency was greatly considered. This is because being consistent makes the program more usable and user-friendly. An example of this is seem throughout the MIS as only greater then $(>)$, less then $(<)$ and equals symbols are used instead of all three plus greater then or equal too $(>=)$ and Less then or equal too $(<=)$. Throughout the software, consistency was maintained by using Google c++ style guide as convention. This meant that functions were descriptive and setters and getters were used as naming convention (e.g set\_cell\_state() and get\_cell\_state). Another convention that was followed was that each word was separated by an underscore rather then capital letters as seen in the example above. Furthermore, constants were all capital letters as seen in Gameboard module and stateT(e.g. DEAD, LIVE). Finally, throughout the Specification the same words were used to maintain consistency rather then use synonyms(e.g row, r, x). The order of input parameters were also kept the same in the order; first: row, second: column, third: stateT.\\
+
+\item Essentiality: Throughout the program, Essentiality was another principle that was greatly taken into consideration. For example, if two functions had similar roles or could do the same thing only one was used. In short, only the necessary functions are included. For example, originally I had set\_game\_state() and set\_cell\_live() as my functions in GameBoard. However, after further tweaking the MIS, I was able to see that set\_game\_state() was able to do everything that set\_cell\_live() was and as a result set\_cell\_live() was eliminated. A place that this was violated was by including get\_total\_neighbours(). This function counts the total number of cells with type StateT (input parameter). This was not used in the current implementation but was included for scalability purposes when in the future we want to check if the state of the game is finished. Currently we were not required to provided the controller module however, this function would be used if we were required too. Another place that Essentiality was violated was for get\_cell\_state() and get\_GameBoard(). by using only get\_GameBoard() we could get the state of any cell but in this case get\_cell\_state() was included for testing purposes since a controller module was not needed.
+
+\item Generality: To maintain generality emphasis was put on modules that preformed a more general task. For example, instead of having a module to set\_cell\_dead() and set\_cell\_Live() only one module called set\_cell\_state() where the user can enter the state to set the cell. The same idea was used for get\_total\_cells() and get\_total\_neighbour() instead of get\_total\_live\_cells(), get\_total\_dead\_cells(). A more general function iterate() was also implemented. Instead of just iterating once throughout the population, the user can choose how many generations to iterate over. This meant that the user could still iterate over one generation but could also iterate over a set number of generations. Finally, generality was maintained for the size of the game-board. Instead of having an n by n game-board, I decided on having a n by m game-board for a more general shape (rectangle). I wanted to make it even more general by allowing any shape game-board but then the game became much harder to implement and due to time restriction was not implemented.
+
+\item Minimality: Minimality was maintained by ensuring that each module only provided one service. This is done by first breaking the modules up into setter and getters. This ensured that one module does not change the state of the game and get the state of the game. For example, get\_cell\_state() is a getter which retrieves the state of a cell without modifying the state of the game while set\_cell\_state() modifies the state of the game but does not retrieve the state of the game. This was also taken into consideration for the Display module. Instead of having a write to file module and a print to file module in one method, 2 different methods were used. This was done because one may choose to print to screen but not write to a file at that interval. 
+
+\item cohesion: The general principle of high cohesion and low coupling was taken into consideration. To ensure High cohesion, methods that are related such as mutators or getters of the state of the game were placed in one module called game-board. On the other hand, methods that had to do with files or printing output to the screen were put in a different module display. The reason I choose to put output to screen in the Display module rather then the Game-Board module is because it is a form of user interaction which is similar to outputting the game-board to a file. Furthermore, Low coupling is done by making display and Game-board as 2 independent modules that do not depend on each other. This ensures that if one of the modules fails, the other module is still working and can function.
+
+\item information hiding: For my program, in order to hide the implementation of the logic, I made these functions private functions (e.g. is\_valid\_state(), is\_valid\_row()). This reduces the complexity for the user and is great for anticipating for change. In the future, if a better or fast algorithm is available, the user won't know that something was changed. Information hiding was also implemented as it is good practice since if a user knows how something was implemented, it is easier for the user to break/hack it.
+
+
+
+\end{itemize}
+\end {document}

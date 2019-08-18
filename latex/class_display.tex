@@ -1,0 +1,105 @@
+\hypertarget{class_display}{}\section{Display Class Reference}
+\label{class_display}\index{Display@{Display}}
+
+
+{\ttfamily \#include $<$Display.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_display_a294011e0e01f1eb61c3340771efa3857}{Display} (string input\+\_\+path, string ouput\+\_\+path)
+\begin{DoxyCompactList}\small\item\em Initializes the \hyperlink{class_display}{Display} class. \end{DoxyCompactList}\item 
+void \hyperlink{class_display_a0fa2553783d7dbff69d0ef634b7a32df}{write\+\_\+game\+\_\+state} (vector$<$ std\+::vector$<$ \hyperlink{struct_cell_t}{CellT} $>$ $>$ Grid)
+\begin{DoxyCompactList}\small\item\em writes games state to output\+\_\+path \end{DoxyCompactList}\item 
+void \hyperlink{class_display_a20dd2fba68084b31e4a87214749bcfc4}{display\+\_\+game\+\_\+state} (vector$<$ std\+::vector$<$ \hyperlink{struct_cell_t}{CellT} $>$ $>$ Grid)
+\begin{DoxyCompactList}\small\item\em displays games state \end{DoxyCompactList}\item 
+vector$<$ vector$<$ \hyperlink{struct_cell_t}{CellT} $>$ $>$ \hyperlink{class_display_ace8ae1cb603205311c142fbc0f2fb709}{read\+\_\+game\+\_\+state} ()
+\begin{DoxyCompactList}\small\item\em reads games state from textfile input\+\_\+path \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is used to reading data from textfile, write to textfile, and write to standard output 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Display@{Display}!Display@{Display}}
+\index{Display@{Display}!Display@{Display}}
+\subsubsection[{\texorpdfstring{Display(string input\+\_\+path, string ouput\+\_\+path)}{Display(string input_path, string ouput_path)}}]{\setlength{\rightskip}{0pt plus 5cm}Display\+::\+Display (
+\begin{DoxyParamCaption}
+\item[{string}]{input\+\_\+path, }
+\item[{string}]{ouput\+\_\+path}
+\end{DoxyParamCaption}
+)}\hypertarget{class_display_a294011e0e01f1eb61c3340771efa3857}{}\label{class_display_a294011e0e01f1eb61c3340771efa3857}
+
+
+Initializes the \hyperlink{class_display}{Display} class. 
+
+Takes in the path to read and write file and initalizes a \hyperlink{class_display}{Display} class 
+\begin{DoxyParams}{Parameters}
+{\em input\+\_\+path} & the path need to access the input.\+txt file \\
+\hline
+{\em output\+\_\+path} & the path need to access the output.\+txt file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+
+
+\subsection{Member Function Documentation}
+\index{Display@{Display}!display\+\_\+game\+\_\+state@{display\+\_\+game\+\_\+state}}
+\index{display\+\_\+game\+\_\+state@{display\+\_\+game\+\_\+state}!Display@{Display}}
+\subsubsection[{\texorpdfstring{display\+\_\+game\+\_\+state(vector$<$ std\+::vector$<$ Cell\+T $>$ $>$ Grid)}{display_game_state(vector< std::vector< CellT > > Grid)}}]{\setlength{\rightskip}{0pt plus 5cm}void Display\+::display\+\_\+game\+\_\+state (
+\begin{DoxyParamCaption}
+\item[{vector$<$ std\+::vector$<$ {\bf CellT} $>$ $>$}]{Grid}
+\end{DoxyParamCaption}
+)}\hypertarget{class_display_a20dd2fba68084b31e4a87214749bcfc4}{}\label{class_display_a20dd2fba68084b31e4a87214749bcfc4}
+
+
+displays games state 
+
+takes the grid as input and displays the current state of game to standard output 
+\begin{DoxyParams}{Parameters}
+{\em Grid} & the current gameboard for the game \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+\index{Display@{Display}!read\+\_\+game\+\_\+state@{read\+\_\+game\+\_\+state}}
+\index{read\+\_\+game\+\_\+state@{read\+\_\+game\+\_\+state}!Display@{Display}}
+\subsubsection[{\texorpdfstring{read\+\_\+game\+\_\+state()}{read_game_state()}}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$vector$<${\bf CellT}$>$ $>$ Display\+::read\+\_\+game\+\_\+state (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{class_display_ace8ae1cb603205311c142fbc0f2fb709}{}\label{class_display_ace8ae1cb603205311c142fbc0f2fb709}
+
+
+reads games state from textfile input\+\_\+path 
+
+reads the input textfile to determine current state of game \begin{DoxyReturn}{Returns}
+Grid which repersents the current state of game 
+\end{DoxyReturn}
+\index{Display@{Display}!write\+\_\+game\+\_\+state@{write\+\_\+game\+\_\+state}}
+\index{write\+\_\+game\+\_\+state@{write\+\_\+game\+\_\+state}!Display@{Display}}
+\subsubsection[{\texorpdfstring{write\+\_\+game\+\_\+state(vector$<$ std\+::vector$<$ Cell\+T $>$ $>$ Grid)}{write_game_state(vector< std::vector< CellT > > Grid)}}]{\setlength{\rightskip}{0pt plus 5cm}void Display\+::write\+\_\+game\+\_\+state (
+\begin{DoxyParamCaption}
+\item[{vector$<$ std\+::vector$<$ {\bf CellT} $>$ $>$}]{Grid}
+\end{DoxyParamCaption}
+)}\hypertarget{class_display_a0fa2553783d7dbff69d0ef634b7a32df}{}\label{class_display_a0fa2553783d7dbff69d0ef634b7a32df}
+
+
+writes games state to output\+\_\+path 
+
+takes the grid as input and writes to ouput textfile the current state of game 
+\begin{DoxyParams}{Parameters}
+{\em Grid} & the current gameboard for the game \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+None 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{_display_8h}{Display.\+h}\end{DoxyCompactItemize}
