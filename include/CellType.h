@@ -1,7 +1,6 @@
 /**
  * \file CellType.h
  * \brief The header file for Celltypes
- * \author Harshil Modi MacID: modih1
  * \date April 3rd, 2019
 */
 

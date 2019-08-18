@@ -1,7 +1,6 @@
 /**
  * \file Display.cpp
  * \brief The class file for Display
- * \author Harshil Modi MacID: modih1
  * \date April 3rd, 2019
 */
 

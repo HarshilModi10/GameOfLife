@@ -1,7 +1,6 @@
 /**
  * \file testGameBoard.cpp
  * \brief The class file for testing GameBoard
- * \author Harshil Modi MacID: modih1
  * \date April 3rd, 2019
 */
 

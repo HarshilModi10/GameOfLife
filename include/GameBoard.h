@@ -1,7 +1,6 @@
 /**
  * \file GameBoard.h
  * \brief The header file for GameBoard
- * \author Harshil Modi MacID: modih1
  * \date April 3rd, 2019
 */
 #ifndef GAMEBOARD_H
